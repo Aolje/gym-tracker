@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gym Tracker PRO</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <h1>🔥 Gym Tracker PRO</h1>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>📅 Rutina semanal</h2>
+      <ul id="rutina">
+        <li>Lunes - Espalda + Bíceps</li>
+        <li>Martes - Pecho + Tríceps</li>
+        <li>Miércoles - Pierna + Core</li>
+        <li>Jueves - Espalda + Hombros</li>
+        <li>Viernes - Pecho + Brazos</li>
+        <li>Sábado - Full + Core</li>
+        <li>Domingo - Descanso</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>✅ Seguimiento diario</h2>
+      <button onclick="marcarEntreno()">Marcar entrenamiento completado</button>
+      <p id="estado"></p>
+    </div>
+
+    <div class="card">
+      <h2>📈 Progreso</h2>
+      <label>Dominadas:</label>
+      <input type="number" id="dominadas">
+      <button onclick="guardarProgreso()">Guardar</button>
+
+      <p id="historial"></p>
+    </div>
+
+    <div class="card">
+      <h2>🧠 Notas</h2>
+      <textarea id="notas" placeholder="Cómo te sentiste hoy..."></textarea>
+      <button onclick="guardarNotas()">Guardar notas</button>
+    </div>
+
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
