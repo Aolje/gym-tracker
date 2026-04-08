@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gym App PRO</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
   <div class="app">
@@ -14,6 +16,20 @@
       <h1>🏋️ Gym PRO</h1>
       <p id="fecha"></p>
     </header>
+
+    <div class="card">
+      <h2>🧠 Modo Coach</h2>
+
+      <h3 id="ejercicioNombre">Ejercicio</h3>
+      <p id="ejercicioInfo">Series x Reps</p>
+      <p id="pesoInfo">Peso</p>
+
+      <button onclick="iniciarEntrenamiento()">▶️ Iniciar</button>
+      <button onclick="completarSerie()">✅ Completar serie</button>
+
+      <p id="contadorSeries"></p>
+      <p id="timer"></p>
+    </div>
 
     <div class="card">
       <h2>🔥 Entrenamiento de hoy</h2>
@@ -42,4 +58,5 @@
 
   <script type="module" src="app.js"></script>
 </body>
+
 </html>

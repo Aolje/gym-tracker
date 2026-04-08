@@ -49,3 +49,9 @@ input {
 .hidden {
   display: none;
 }
+
+#timer {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+}
