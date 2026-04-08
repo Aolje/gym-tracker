@@ -288,7 +288,11 @@ window.mostrarEjercicios = function () {
   if (ejercicios[rutinaHoy]) {
     ejercicios[rutinaHoy].forEach(ej => {
       const li = document.createElement("li");
-      li.innerText = ej;
+      li.innerHTML = `
+        <strong>${ej.nombre}</strong><br>
+        Series: ${ej.series} | Reps: ${ej.reps} | Peso: ${ej.peso}<br>
+        Descanso: ${ej.descanso}${ej.notas ? ` | 📝 ${ej.notas}` : ""}
+      `;
       lista.appendChild(li);
     });
   }
