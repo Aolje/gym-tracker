@@ -305,27 +305,36 @@ window.marcarCompletado = function () {
 window.guardarProgreso = async function () {
   const dominadas = document.getElementById("dominadas").value;
 
-  await addDoc(collection(db, "progreso"), {
-    dominadas: Number(dominadas),
-    fecha: new Date().toLocaleString()
-  });
-
-  alert("Guardado 🔥");
-  cargarHistorial();
+  try {
+    await addDoc(collection(db, "progreso"), {
+      dominadas: Number(dominadas),
+      fecha: new Date().toLocaleString()
+    });
+    alert("Guardado 🔥");
+    cargarHistorial();
+  } catch (error) {
+    console.error("Error al guardar en Firebase:", error);
+    alert("Error al guardar: " + error.message);
+  }
 };
 
 // Cargar historial
 async function cargarHistorial() {
-  const querySnapshot = await getDocs(collection(db, "progreso"));
+  try {
+    const querySnapshot = await getDocs(collection(db, "progreso"));
 
-  let texto = "";
+    let texto = "";
 
-  querySnapshot.forEach(doc => {
-    const data = doc.data();
-    texto += `${data.fecha} - ${data.dominadas} dominadas\n`;
-  });
+    querySnapshot.forEach(doc => {
+      const data = doc.data();
+      texto += `${data.fecha} - ${data.dominadas} dominadas\n`;
+    });
 
-  document.getElementById("historial").innerText = texto;
+    document.getElementById("historial").innerText = texto || "Sin registros aún.";
+  } catch (error) {
+    console.error("Error al cargar historial:", error);
+    document.getElementById("historial").innerText = "Error al cargar: " + error.message;
+  }
 }
 
 // ====== MODO COACH ======
