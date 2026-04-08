@@ -1,23 +1,105 @@
 import { db, addDoc, collection, getDocs } from "./firebase.js";
 
-// Cargar estado al iniciar
-window.onload = () => {
-  document.getElementById("estado").innerText =
-    localStorage.getItem("estado") || "No entrenado hoy";
+// Fecha actual
+const fecha = new Date();
+document.getElementById("fecha").innerText = fecha.toLocaleDateString();
 
-  document.getElementById("historial").innerText =
-    localStorage.getItem("progreso") || "Sin datos aún";
-
-  document.getElementById("notas").value =
-    localStorage.getItem("notas") || "";
+// Rutina por día
+const rutinas = {
+  0: "Descanso 😴",
+  1: "Espalda + Bíceps",
+  2: "Pecho + Tríceps",
+  3: "Pierna + Core",
+  4: "Espalda + Hombros",
+  5: "Brazos + Pecho",
+  6: "Full + Cardio"
 };
 
-async function cargarProgreso() {
+const ejercicios = {
+  "Espalda + Bíceps": [
+    "Dominadas",
+    "Remo mancuerna",
+    "Curl bíceps",
+    "Curl martillo"
+  ],
+  "Pecho + Tríceps": [
+    "Flexiones",
+    "Press mancuernas",
+    "Fondos",
+    "Extensión tríceps"
+  ],
+  "Pierna + Core": [
+    "Sentadillas",
+    "Peso muerto",
+    "Zancadas",
+    "Plancha"
+  ],
+  "Espalda + Hombros": [
+    "Dominadas",
+    "Remo",
+    "Elevaciones laterales",
+    "Press hombro"
+  ],
+  "Brazos + Pecho": [
+    "Flexiones",
+    "Curl bíceps",
+    "Tríceps",
+    "Fondos"
+  ],
+  "Full + Cardio": [
+    "Flexiones",
+    "Sentadillas",
+    "Plancha",
+    "Cardio"
+  ]
+};
+
+const dia = fecha.getDay();
+const rutinaHoy = rutinas[dia];
+
+document.getElementById("rutinaHoy").innerText = rutinaHoy;
+
+// Mostrar ejercicios
+window.mostrarEjercicios = function () {
+  const lista = document.getElementById("listaEjercicios");
+  lista.innerHTML = "";
+
+  if (ejercicios[rutinaHoy]) {
+    ejercicios[rutinaHoy].forEach(ej => {
+      const li = document.createElement("li");
+      li.innerText = ej;
+      lista.appendChild(li);
+    });
+  }
+
+  document.getElementById("ejerciciosCard").classList.remove("hidden");
+};
+
+// Marcar entrenamiento
+window.marcarCompletado = function () {
+  alert("🔥 Entrenamiento completado");
+};
+
+// Guardar progreso en Firebase
+window.guardarProgreso = async function () {
+  const dominadas = document.getElementById("dominadas").value;
+
+  await addDoc(collection(db, "progreso"), {
+    dominadas: Number(dominadas),
+    fecha: new Date().toLocaleString()
+  });
+
+  alert("Guardado 🔥");
+  cargarHistorial();
+};
+
+// Cargar historial
+async function cargarHistorial() {
   const querySnapshot = await getDocs(collection(db, "progreso"));
 
   let texto = "";
 
-  querySnapshot.forEach((doc) => {
+  querySnapshot.forEach(doc => {
     const data = doc.data();
     texto += `${data.fecha} - ${data.dominadas} dominadas\n`;
   });
@@ -25,37 +107,5 @@ async function cargarProgreso() {
   document.getElementById("historial").innerText = texto;
 }
 
-// Marcar entrenamiento
-function marcarEntreno() {
-  const fecha = new Date().toLocaleDateString();
-  const mensaje = `Entrenado el ${fecha}`;
-  localStorage.setItem("estado", mensaje);
-  document.getElementById("estado").innerText = mensaje;
-}
-
-// Guardar progreso
-async function guardarProgreso() {
-  const dominadas = document.getElementById("dominadas").value;
-
-  try {
-    await addDoc(collection(db, "progreso"), {
-      dominadas: Number(dominadas),
-      fecha: new Date().toISOString()
-    });
-
-    alert("Guardado en la nube 🔥");
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-// Guardar notas
-function guardarNotas() {
-  const notas = document.getElementById("notas").value;
-  localStorage.setItem("notas", notas);
-  alert("Notas guardadas");
-}
-
-window.onload = () => {
-  cargarProgreso();
-};
+// Inicializar
+cargarHistorial();
